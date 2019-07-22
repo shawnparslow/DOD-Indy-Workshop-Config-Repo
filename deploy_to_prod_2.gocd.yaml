@@ -4,11 +4,10 @@ pipelines:
     group: kubernetes
     environment_variables:
     materials:
-      upstream:
+      uat:
         pipeline: deploy_to_uat
         stage: approval_stage
-    materials:
-      upstream:
+      build:
         pipeline:  build_and_package
         stage: build_stage
       SourceCodeRepo:

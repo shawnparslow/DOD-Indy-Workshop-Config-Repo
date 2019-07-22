@@ -4,7 +4,7 @@ pipelines:
     group: kubernetes
     environment_variables:
     materials:
-      upstream:
+      build:
         pipeline: build_and_package
         stage: test_stage
       SourceCodeRepo:
