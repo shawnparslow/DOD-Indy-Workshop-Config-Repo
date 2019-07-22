@@ -1,0 +1,60 @@
+format_version: 3
+pipelines:
+  deploy_to_cluster:
+    group: kubernetes
+    environment_variables:
+    materials:
+      upstream:
+        pipeline: build_and_package
+        stage: build_stage
+      SourceCodeRepo:
+        git: https://github.com/gocd-demo/node-bulletin-board.git
+        shallow_clone: false
+        auto_update: true
+        branch: master
+    stages:
+    - traffic_light:
+        notify_stage: success
+        jobs:
+          notify_job:
+            timeout: 0
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
+                command: env echo
+                arguments: 
+                - "ready"
+    - deploy_to_cluster:
+        approval:
+          type: manual
+        jobs:
+          deploy:
+            timeout: 0
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_package
+                stage: build_stage
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                arguments:
+                command: ./app-deployment.sh
+                run_if: passed
+    - approval_stage:
+        approval: 
+          type: manual
+        jobs:
+          approval_job:
+            timeout: 0
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
+                command: env echo
+                arguments: 
+                - "approved"
