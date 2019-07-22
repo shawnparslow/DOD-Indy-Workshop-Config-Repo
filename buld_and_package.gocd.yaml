@@ -2,8 +2,6 @@ format_version: 4
 pipelines:
   build_and_package:
     group: kubernetes
-    label_template: ${COUNT}
-    lock_behavior: unlockWhenFinished
     display_order: 1
     environment_variables:
       DOCKERHUB_USERNAME: kmugrage
@@ -11,18 +9,13 @@ pipelines:
       git:
         git: https://github.com/kmugrage/node-bulletin-board.git
         shallow_clone: true
-        auto_update: true
-        branch: master
     stages:
     - build_stage:
-        fetch_materials: true
-        keep_artifacts: false
-        clean_workspace: false
+        # This can be set to manual if desired
         approval:
           type: success
         jobs:
           build_image:
-            timeout: 0
             elastic_profile_id: demo-app
             artifacts:
             - external:
@@ -38,13 +31,11 @@ pipelines:
                 - -c
                 - docker build -t $DOCKERHUB_USERNAME/bulletin-board:$GO_PIPELINE_LABEL . -f Dockerfile.application
                 command: /bin/bash
-                run_if: passed
     - test_stage:
         approval:
           type: success
         jobs:
           test_image:
-            timeout: 0
             elastic_profile_id: demo-app
             tasks:
             - exec:
@@ -52,4 +43,3 @@ pipelines:
                 arguments:
                 - -c
                 - docker run -t $DOCKERHUB_USERNAME/bulletin-board:$GO_PIPELINE_LABEL npm test
-                run_if: passed
