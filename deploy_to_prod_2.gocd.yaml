@@ -7,6 +7,10 @@ pipelines:
       upstream:
         pipeline: deploy_to_uat
         stage: approval_stage
+    materials:
+      upstream:
+        pipeline:  build_and_package
+        stage: build_stage
       SourceCodeRepo:
         git: https://github.com/gocd-demo/node-bulletin-board.git
         shallow_clone: false
