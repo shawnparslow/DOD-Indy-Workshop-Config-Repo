@@ -5,15 +5,13 @@ pipelines:
     environment_variables:
     materials:
       upstream:
-        pipeline: test_application
-        stage: test_app_image
-        name: upstream_pipeline
+        pipeline: build_and_package
+        stage: test_stage
       SourceCodeRepo:
         git: https://github.com/gocd-demo/node-bulletin-board.git
         shallow_clone: false
         auto_update: true
         branch: master
-        name: SourceCodeRepo
     stages:
     - deploy_to_cluster:
         approval:
@@ -28,8 +26,8 @@ pipelines:
                   EnvironmentVariablePrefix: ''
                   SkipImagePulling: 'true'
                 artifact_id: bulletin-board
-                pipeline: build_and_publish_image/test_application
-                stage: build_and_publish_image
+                pipeline: build_and_package/test_application
+                stage: build_stage
                 job: build_image
                 artifact_origin: external
                 run_if: passed
