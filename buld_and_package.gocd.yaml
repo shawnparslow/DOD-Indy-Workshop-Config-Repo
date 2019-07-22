@@ -45,7 +45,7 @@ pipelines:
         jobs:
           test_image:
             timeout: 0
-            elastic_profle_id: demo-app
+            elastic_profile_id: demo-app
             tasks:
             - exec:
                 command: /bin/bash
