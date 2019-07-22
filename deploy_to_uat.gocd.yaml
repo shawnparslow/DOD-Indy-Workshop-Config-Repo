@@ -21,7 +21,7 @@ pipelines:
             elastic_profile_id: demo-app
             tasks:
             - exec:
-                command: env echo
+                command: echo
                 arguments: 
                 - "ready"
     - deploy_to_uat:
@@ -55,6 +55,6 @@ pipelines:
             elastic_profile_id: demo-app
             tasks:
             - exec:
-                command: env echo
+                command: echo
                 arguments: 
                 - "approved"
