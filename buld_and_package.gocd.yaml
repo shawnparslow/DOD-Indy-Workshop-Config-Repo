@@ -6,6 +6,7 @@ pipelines:
     lock_behavior: unlockWhenFinished
     display_order: 1
     environment_variables:
+      # Add your Docker Hub username here so GoCD knows where to store the image
       DOCKERHUB_USERNAME: 
     materials:
       git:
