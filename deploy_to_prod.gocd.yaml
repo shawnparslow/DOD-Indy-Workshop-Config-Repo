@@ -1,6 +1,7 @@
 format_version: 3
 pipelines:
   deploy_to_cluster:
+    group: kubernetes
     environment_variables:
     materials:
       upstream:
