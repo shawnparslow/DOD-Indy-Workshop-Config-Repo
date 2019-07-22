@@ -14,7 +14,7 @@ pipelines:
         pipeline:  build_and_package
         stage: build_stage
       SourceCodeRepo:
-        git: https://github.com/gocd-demo/node-bulletin-board.git
+        git: https://github.com/kmugrage/node-bulletin-board.git
         shallow_clone: false
         auto_update: true
         branch: master
