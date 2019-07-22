@@ -1,0 +1,38 @@
+format_version: 3
+pipelines:
+  deploy_to_cluster:
+    environment_variables:
+    materials:
+      upstream:
+        pipeline: test_application
+        stage: test_app_image
+        name: upstream_pipeline
+      SourceCodeRepo:
+        git: https://github.com/gocd-demo/node-bulletin-board.git
+        shallow_clone: false
+        auto_update: true
+        branch: master
+        name: SourceCodeRepo
+    stages:
+    - deploy_to_cluster:
+        approval:
+          type: success
+        jobs:
+          deploy:
+            timeout: 0
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_publish_image/test_application
+                stage: build_and_publish_image
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                arguments:
+                command: ./app-deployment.sh
+                run_if: passed
