@@ -1,6 +1,6 @@
 format_version: 3
 pipelines:
-  deploy_to_cluster:
+  deploy_to_uat:
     group: kubernetes
     environment_variables:
     materials:
@@ -24,7 +24,7 @@ pipelines:
                 command: env echo
                 arguments: 
                 - "ready"
-    - deploy_to_cluster:
+    - deploy_to_uat:
         approval:
           type: manual
         jobs:
