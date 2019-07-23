@@ -2,6 +2,7 @@ format_version: 4
 pipelines:
   deploy_to_prod:
     group: kubernetes
+    display_order: 3
     environment_variables:
       NAMESPACE: gocd
     secure_variables:
