@@ -13,14 +13,11 @@ pipelines:
       SourceCodeRepo:
         git: https://github.com/kmugrage/node-bulletin-board.git
         shallow_clone: false
-        auto_update: true
-        branch: master
     stages:
     - traffic_light:
         notify_stage: success
         jobs:
           notify_job:
-            timeout: 0
             elastic_profile_id: demo-app
             tasks:
             - exec:
@@ -32,12 +29,10 @@ pipelines:
           type: manual
         jobs:
           deploy:
-            timeout: 0
             elastic_profile_id: demo-app
             tasks:
             - fetch:
                 options:
-                  EnvironmentVariablePrefix: ''
                   SkipImagePulling: 'true'
                 artifact_id: bulletin-board
                 pipeline: build_and_package
@@ -46,18 +41,18 @@ pipelines:
                 artifact_origin: external
                 run_if: passed
             - exec:
-                arguments:
                 command: ./app-deployment.sh
+                arguments:
                 run_if: passed
     - approval_stage:
         approval: 
           type: manual
         jobs:
           approval_job:
-            timeout: 0
             elastic_profile_id: demo-app
             tasks:
             - exec:
                 command: echo
                 arguments: 
                 - "approved"
+                
