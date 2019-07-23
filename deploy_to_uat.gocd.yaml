@@ -6,13 +6,13 @@ pipelines:
     environment_variables:
       NAMESPACE: uat
     secure_variables:
-      KUBE_TOKEN: AES:Do9wsHARRcctCLdlNXkyVg==:MgHh0Rtd/JzeA/WD7yadoz8UG22bLieknzzcRSpmuRU/pympqdLmI+xcVFhQB0BXP8XSsG6xB0JR7PTthEOz9tFBkPbVwGEA/Ux3Y+es1ytt9DIhzgIxd8FO9lyIXS+uRKFBbVVOOiA3a/qn8mODYuiR00yFz5yRzi3DN1y2nrrPdK1lwRx07OKFQyo7V/pyMt01NYwToHUXSi9NozJp8l4f/nacBb25emPF4ZMJgOjfIyTjEC1/sLhk+WQuZEKqk4iMswWhjAuzus+0LEJVj5zdxJSz4mlnK8xfw3kMF/EVb+ZeWm3/smexnCyLNCp3XiYdMgRjwTfJ5ehXSY1IebYb+DdHdR4W+6zhAWXyZFkq/B8grwME744Z7IyirhFvHA4V/0OYYcs8t2A6H8o1cXLALqFPjhJS2mbmN9GgYDB8TyiGnJLVkW/+RVkLWBScNYIpUcxjuFMHiDhnaowMdqRexRQ62upOYaIRhuBL496fIdOYW/LH2T3bR+4tjuhznzj/D3+cXoZrff8CugADubdSq/MJYfPPcrf0i/svoqtcQsIG/ltHcL/jqU9PEEX3Ks3jlaUCaTx1cErBHSVeEv80NikZDxM7eJZU4+X5hT1ZB01HAgsbQtOscxZP5oaP9OIEkG6ASjeb5xMTy0XwCoXq4bwZqNYGlqYX73TiF+3eyhodjJcoY1X24U3YXhAn7lIizM8Tja0tErQ2RHXUuilmZni5o0ho7zPbAX52/g5LTQ2fLJfR9AQSGr4tMssvQJxDckSWi5I4GNqUIiO/30J1mK0WvqcE2c+oYY+ocQ5YxzeuXB6mtmSNAlXrzz+BN6DYCf5lvW9YA6Mkry2tsIUSyGVo+7rc8kJJkmXSxybGGx14nfDlkalRz5BLSyN8usE+nadD7QXynRCF3aVtMkgRiDwsGv8/+2kR2Yqs7AizjSP1Z1Z1EVLCZ2F93ARBFOYpbENi58ubz2mzHuJDLSedm3B2qJs9hoaOVxFX9DdW5pWMaqkVC32MLy1Fh+ccr1eDX9RDJwq+3tHzi6yKqCodIBRmetJWrDoBXh7CXipSNq638VIYjyibgVTED/IGD9i2q/sCX3hRKESJ+S4JvxlKCs50/DwR8L4yto7rUxr7pIq/LdXsMD6L3mLBiSmCtZJx+QiDnVw+ekT+LOd0AQ==
+      KUBE_TOKEN: # YOUR VALUE
     materials:
       upstream:
         pipeline: build_and_package
         stage: build_stage
       SourceCodeRepo:
-        git: https://github.com/kmugrage/node-bulletin-board.git
+        git: # YOUR VALUE
         shallow_clone: false
     stages:
     - traffic_light:

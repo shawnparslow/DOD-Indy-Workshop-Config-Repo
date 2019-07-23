@@ -4,10 +4,10 @@ pipelines:
     group: kubernetes
     display_order: 1
     environment_variables:
-      DOCKERHUB_USERNAME: kmugrage
+      DOCKERHUB_USERNAME: # YOUR VALUE
     materials:
       git:
-        git: https://github.com/kmugrage/node-bulletin-board.git
+        git: # YOUR VALUE
         shallow_clone: true
     stages:
     - build_stage:
