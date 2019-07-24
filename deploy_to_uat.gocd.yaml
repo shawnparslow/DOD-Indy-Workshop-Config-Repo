@@ -1,0 +1,63 @@
+format_version: 4
+pipelines:
+  deploy_to_uat:
+    group: kubernetes
+    display_order: 3
+    environment_variables:
+      NAMESPACE: uat
+    secure_variables:
+      KUBE_TOKEN: AES:jRNeZKEYwIs8mOFXErg41A==:dlN904oPCnbKsjudrKclYAV1+lbJ1IQLilkCPfawB8sH/adfESy8xYxpxzJ48EUYkunKwHrVXh9O6SH+BLz4IXpe4N2tesv72SmvzO89sIold/BPuFKhc57d5nLvKi79VxuACrzEdIK1t4jqFMXrq0i1Bw81N4tBQobU8jQXH/3e29dS+mGrFUiiv0/diNX9Y2bLmvoOokF/N0bdXi0UA6I6aiYJPAH8QCVdC+amZ+Zd2NCWM2nyUg6v+zsXKfekCOHEHEzMPOEsDRFpZzZm9m/V2gTZUqxOLBkRYwLAIM8enWrtcY/ygw8yThchUGmfYQsmRxSd3Rvd95zwmf5KvGrCaCpa5lPRx9HyrdpoZ41B4yA21iyA6w2hH5d/oawb36QBz7QkIQZLkGXPxljHEkC2FOOYzjXuSrHpO1M9QT0hwbYR2ZAldxNc+Mmkx5U3eUA/XO95x6eQA/WE/LPlr98qwJneF4t8HoxBbKczViNMUjPIFysLfSF0kM/r4HJ9uynbaqte/l0Kx1+UlOZ3DIW/XT/8u0/rtsb24C9B7HKawEtZLvAoVGyBWFnQ+zxFlSl7hSmTWrKpnjpmxAD+pn/EbN5/LTAgSdIxIuwMr+gb+DgB4WpEK3Wsk/70E4VkHz9koY9EYViNkJwqDLxNh5LOMKipBW4+v9BLfcMQKpjui8drIMlWJzWV2PulKsdBnz1tOh8hyaSx1Tq3HTGGRVH4UxaRAwMvcpIUWQeRmBPGb2Rx4X3Cp0h/1aaSYgBPS2Q/LrIlD4ybIqNaTzp7wArC2pVezC+GBhZO4WGQ7HZHF9RhgHkDfXiNnjN5XaSq0aYM6vNKQ22OLSwRtxyFV57a28Be3aWFdoCLIZ7EF4NQVTAa3hWSEcfaAVUtrBv3zQ46SiK/UylIFAhFWCm1jkWaeTYl/WDNifWjcRowU3nM349a/H5jQMzgw6D9vv3x9uQ7JNrz27YcdVrP07aK8P/4zI+5ZrmEc4gnRYK6mjc2QsDrgHUBMutIlXSOn41AkDOQ58acClymh/SId8f22SE4RKAMsqOc9MC9+00kMn2zLJDXKDuM/Z6GJlKKmNKYCsqS31R4nYGGbBEG9+LwClh3synLabV5oXTY1eHOvP5zgwnEZgbHxc172Ju9tcbYHUejBia9dWF7EuokeHP9VQ==
+    materials:
+      build:
+        pipeline: build_and_package
+        stage: test_stage
+      SourceCodeRepo:
+        git: https://github.com/shawnparslow/node-bulletin-board.git
+        shallow_clone: false
+    stages:
+    - trafficlight_stage:
+        # This can be set to manual if desired
+        approval:
+          type: success
+        jobs:
+          build_image:
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
+                arguments:
+                - -c
+                - echo ready
+    - deploy_to_uat:
+        approval:
+          type: manual
+        jobs:
+          deploy:
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_package
+                stage: build_stage
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                command: ./app-deployment.sh
+                arguments:
+                run_if: passed
+
+    - approval_stage:
+        # This can be set to manual if desired
+        approval:
+          type: manual
+        jobs:
+          build_image:
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
+                arguments:
+                - -c
+                - echo approved
