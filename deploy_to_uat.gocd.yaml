@@ -24,6 +24,7 @@ pipelines:
             elastic_profile_id: demo-app
             tasks:
             - exec:
+                command: /bin/bash
                 arguments:
                 - -c
                 - echo ready
@@ -58,6 +59,7 @@ pipelines:
             elastic_profile_id: demo-app
             tasks:
             - exec:
+                command: /bin/bash
                 arguments:
                 - -c
                 - echo approved
