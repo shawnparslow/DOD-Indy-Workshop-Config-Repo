@@ -1,0 +1,38 @@
+format_version: 4
+pipelines:
+  deploy_to_prod:
+    group: kubernetes
+    display_order: 3
+    environment_variables:
+      NAMESPACE: gocd
+    secure_variables:
+      KUBE_TOKEN: AES:K3AkDsEUoqG2M3wSlqHK6Q==:H4lWC0LMD++BLfKXNvM4J/73Bkv95+LWVfAi56QCGU5WS7On2KKq8NdGI1P/7SK9Y5LXgui15WhKLcJKcr5NCo5nRDvX4FIWagXgiXX37dEPle262ksmih+xuzvGqkBFuIWFKFiWyCDjBVNLh+19T0Xw47asZTK6m1Nhn3yJDPq2JCQnXkfrfIadPZow89XqjaMz9NGxkmMpuU3P55Awcx0ZYcB4a4aFDmvYqJxaKPFtsZArRttAYeo056ESgXXvl2vA3eg/rhg8vd9QNymb52y/gDdMIX/9k/lk15Rol0IvaJTLt4pZ/sqAJI3lR043/oPEIQctJoEFs72gQhHqG03Wu/phqBK8jmybLIyitUmYYXzLVWVVGwm5/0P7bu1V8EBfSVREOBZ5bfqepUboRt/Ui+hyZgqV+xGhYR86pJNh46mko5IQbLtBoENaz5oRWuwODycSvFHd6JmWIpLO+hUgp+ggs+JFS/1sC6lzbnNsqw5JTnAdS7JfKn7MqQ90a13Oi2CmBaCbP9TOophRB07WQpfDJxSOftcwQlGhh2xSCvG2laNYmecIes9cN0LxRb4Ot/axobJz+AwkdzsEeW0a7E/NR5MXAgJNm6LDw79CuWn4tu0jxQwuyx8Nix++f9FEvcF1W4XBlX09UGWVr9CeYk8k8eVDa+WGoUl/5BSIiQJUYtwJuF9blzhhk2RkfeRBu6bmvFKOmDsdZqsonO4Ixd3wGFlC/GqfVedil5ycczdUqiliKMpq2JqUsWuThIhC2zlE1q3Hc7D42sv/961A1OK8tocOpFEYOq/cxZc9djDdPp4gMvJq7zjfcjNdWG0xynbzYDbFszMvPTXE1gJ5sXGKJqrej8qOQoAFIYIFce00s7iwZKsa68iS/zwJtGRb6d9/IA4NeK8j8SvtbuIm+Gt0wFZiNdTTsIb5u8HWgWjkkNxbmbNJ8c2JTyU73Iiv5ms9EhGjgunqlqYOXzoURtsPPmYQb7ktzREOVo9K7qCeIRu8RahnM20y6zQ3hkY1qny+xLUe1sBE0Ilzi2vPFOJjI7t+5dtEMeOYkB234YOU9K/CemS3GzOQoGIgaNqtk1quLczQbP45tAUnxArYebFLaCkrWvmnIrxZUp9R0lNx3XJsrW3CdeTMWTphCpxKTI//9JhR5ALn7Bea4e39EUYxGI1Ynja4/3MYzWw=
+    materials:
+      build:
+        pipeline: build_and_package
+        stage: test_stage
+      SourceCodeRepo:
+        git: https://github.com/shawnparslow/node-bulletin-board.git
+        shallow_clone: false
+    stages:
+    - deploy_to_prod:
+        approval:
+          type: success
+        jobs:
+          deploy:
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_package
+                stage: build_stage
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                command: ./app-deployment.sh
+                arguments:
+                run_if: passed
