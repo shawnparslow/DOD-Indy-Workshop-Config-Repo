@@ -31,7 +31,6 @@ pipelines:
                 - -c
                 - docker build -t $DOCKERHUB_USERNAME/bulletin-board:$GO_PIPELINE_LABEL . -f Dockerfile.application
                 command: /bin/bash
-    stages:
     - test_stage:
         # This can be set to manual if desired
         approval:
